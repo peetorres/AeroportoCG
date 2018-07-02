@@ -3,11 +3,24 @@
 #include <cstdio>
 
 FILE *fp;
-GLMmodel *model;
+GLMmodel *cenario, *aviao;
 
 GLfloat angle = 0, fAspect;
+GLfloat x = 0, y = 0;
 
 void tecla(unsigned char tecla, int x, int y){
+    if(tecla == 'd'){
+      x += 10;
+    }
+    if(tecla == 'a'){
+      x -= 10;
+    }
+    if(tecla == 's'){
+      y -= 10;
+    }
+    if(tecla == 'w'){
+      y += 10;
+    }
     if (tecla == 'F'){
             exit(0);
     }
@@ -25,19 +38,28 @@ void Desenha(void){
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      //Drawing the model
      glPushMatrix(); // salvar as coordenadas correntes
-     glTranslatef(0.0,0.0,550.0);
+     glTranslatef(0.0,0.0,570.0);
      glRotatef(-90,0.0,1.0,0.0);
      glRotatef(-20,0.0,0.0,1.0);
-     glRotatef(angle, 0, 1, 0); // rotacao eterna
+     //glRotatef(angle, 0, 1, 0); // rotacao eterna
      //HERE IS WHERE I DRAW MY OBJ
-     glmDraw(model,GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
+     glmDraw(cenario,GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
      glPopMatrix();
+
+     glPushMatrix(); // salvar as coordenadas correntes
+     glTranslatef(3.0,3.0,570.0);
+     glRotatef(-90,0.0,1.0,0.0);
+     glRotatef(-20,0.0,0.0,1.0);
+     glScalef(0.3,0.3,0.2);
+     glRotatef(angle, 0, 1, 0); // rotacao eterna
+     glmDraw(aviao, GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
+     glPopMatrix();
+
 
      angle = angle+0.6;
      if(angle > 360)
        angle = angle - 360;
-
-
+glutKeyboardFunc(tecla);
      glutSwapBuffers();
 }
 
@@ -64,7 +86,7 @@ void EspecificaParametrosVisualizacao(void){
 	// Inicializa sistema de coordenadas de projeção
 	glLoadIdentity();
 	// Especifica a projeção perspectiva
-	gluPerspective(angle,fAspect,0.1,1000.0);
+	gluPerspective(angle,fAspect,0.1,400.0);
 	// Especifica sistema de coordenadas do modelo
 	glMatrixMode(GL_MODELVIEW);
 	// Inicializa sistema de coordenadas do modelo
@@ -96,8 +118,10 @@ int main(int argc, char* argv[]){
     Inicializa();
 
     int i;
-    model = glmReadOBJ("cessna.obj");
-    glmVertexNormals(model,180.0,0);
+    cenario = glmReadOBJ("Cenario.obj");
+    aviao = glmReadOBJ("Arsenal.obj");
+    glmVertexNormals(cenario,180.0,0);
+    glmVertexNormals(aviao,180.0,0);
 
     glutDisplayFunc(Desenha);
     glutIdleFunc(Desenha);

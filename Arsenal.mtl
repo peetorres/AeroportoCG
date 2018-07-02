@@ -1,0 +1,30 @@
+# Blender MTL File: 'Arsenal_VG33.blend'
+# Material Count: 2
+
+newmtl UV_texture
+Ns 398.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.627451 0.627451 0.627451
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Desktop/Nueva carpeta/UV_raw_rgb.tif
+map_Bump /Desktop/Nueva carpeta/UV_bump_02.tif
+map_Ka /Desktop/Nueva carpeta/UV_diffuse.tif
+map_Ks /Desktop/Nueva carpeta/UV_specular.tif
+
+newmtl glass
+Ns 398.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.627451 0.627451 0.627451
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.330000
+d 0.000000
+illum 2
+map_Kd /Desktop/Nueva carpeta/UV_raw_rgb.tif
+map_Bump /Desktop/Nueva carpeta/UV_bump_02.tif
+map_Ka /Desktop/Nueva carpeta/UV_diffuse.tif
+map_Ks /Desktop/Nueva carpeta/UV_specular.tif
