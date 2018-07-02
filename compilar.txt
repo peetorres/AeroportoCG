@@ -1,0 +1,1 @@
+g++ main.cpp -o teste -framework OpenGL -framework GLUT -framework Cocoa -lglm -w
