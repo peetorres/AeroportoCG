@@ -2,30 +2,49 @@
 #include <glm.h>
 #include <cstdio>
 
+void EspecificaParametrosVisualizacao();
 FILE *fp;
 GLMmodel *cenario, *aviao;
 
 GLfloat angle = 0, fAspect;
-GLfloat x = 0, y = 0;
+GLfloat movx = 0, movy = 0, movz = 0;
+
+
+void GerenciaMouse (int button, int state, int x, int y){
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+        if(angle >= 5){
+          angle -= 5;
+        }
+    }
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN){
+      if(angle <= 130){
+          angle += 5;
+      }
+    }
+    EspecificaParametrosVisualizacao();
+    glutPostRedisplay();
+}
 
 void tecla(unsigned char tecla, int x, int y){
-    if(tecla == 'd'){
-      x += 10;
-    }
-    if(tecla == 'a'){
-      x -= 10;
-    }
-    if(tecla == 's'){
-      y -= 10;
-    }
-    if(tecla == 'w'){
-      y += 10;
-    }
-    if (tecla == 'F'){
-            exit(0);
-    }
-    else if (tecla == 'f'){
+    switch (tecla){
+      case 'w':
+        movz += 0.1;
+        break;
+      case 's':
+        movz -= 0.1;
+        break;
+      case 'd': // alçar voo
+        angle += 1;
+        break;
+      case 'a': // alçar voo
+        angle -= 1;
+        break;
+      case 'F':
         exit(0);
+        break;
+      case 'f':
+        exit(0);
+        break;
     }
 }
 
@@ -47,7 +66,8 @@ void Desenha(void){
      glPopMatrix();
 
      glPushMatrix(); // salvar as coordenadas correntes
-     glTranslatef(3.0,3.0,570.0);
+     glTranslatef(movz, 0, 0);
+     glTranslatef(0.0,0.0,570.0);
      glRotatef(-90,0.0,1.0,0.0);
      glRotatef(-20,0.0,0.0,1.0);
      glScalef(0.3,0.3,0.2);
@@ -55,11 +75,11 @@ void Desenha(void){
      glmDraw(aviao, GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
      glPopMatrix();
 
-
+     /*
      angle = angle+0.6;
      if(angle > 360)
-       angle = angle - 360;
-glutKeyboardFunc(tecla);
+       angle = angle - 360;*/
+     glutKeyboardFunc(tecla);
      glutSwapBuffers();
 }
 
@@ -86,7 +106,7 @@ void EspecificaParametrosVisualizacao(void){
 	// Inicializa sistema de coordenadas de projeção
 	glLoadIdentity();
 	// Especifica a projeção perspectiva
-	gluPerspective(angle,fAspect,0.1,400.0);
+	gluPerspective(angle,fAspect,1,400.0);
 	// Especifica sistema de coordenadas do modelo
 	glMatrixMode(GL_MODELVIEW);
 	// Inicializa sistema de coordenadas do modelo
@@ -127,6 +147,7 @@ int main(int argc, char* argv[]){
     glutIdleFunc(Desenha);
     glutReshapeFunc(AlteraTamanhoJanela);
     glutKeyboardFunc(tecla);
+    glutMouseFunc(GerenciaMouse);
 
     glutMainLoop();
     return 0;
