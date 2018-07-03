@@ -2,7 +2,15 @@
 #include <glm.h>
 #include <cstdio>
 
+void GerenciaMouse(int, int, int, int);
+void tecla(unsigned char, int, int);
+void Simulator();
+void DesenhaCenario();
+void Inicializa();
+void AlteraTamanhoJanela(GLsizei, GLsizei);
+void DesenhaAviao();
 void EspecificaParametrosVisualizacao();
+
 FILE *fp;
 GLMmodel *cenario, *aviao;
 
@@ -48,39 +56,46 @@ void tecla(unsigned char tecla, int x, int y){
     }
 }
 
-// Função callback chamada para fazer o desenho
-void Desenha(void){
-     int i;
-     glMatrixMode(GL_MODELVIEW);
-     //glLoadIdentity();
-     // Limpa a janela de visualização com a cor de fundo especificada
+void Simulator(void){
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     //Drawing the model
+
+     DesenhaCenario();
+     DesenhaAviao();
+     //DesenhaAviao();
+     //glutKeyboardFunc(tecla);
+     glutSwapBuffers();
+}
+
+// Função callback chamada para fazer o desenho
+void DesenhaCenario(void){
+     glMatrixMode(GL_MODELVIEW);
      glPushMatrix(); // salvar as coordenadas correntes
      glTranslatef(0.0,0.0,570.0);
      glRotatef(-90,0.0,1.0,0.0);
      glRotatef(-20,0.0,0.0,1.0);
+     glScalef(2,2,2);
      //glRotatef(angle, 0, 1, 0); // rotacao eterna
      //HERE IS WHERE I DRAW MY OBJ
      glmDraw(cenario,GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
      glPopMatrix();
+}
 
-     glPushMatrix(); // salvar as coordenadas correntes
-     glTranslatef(movz, 0, 0);
-     glTranslatef(0.0,0.0,570.0);
-     glRotatef(-90,0.0,1.0,0.0);
-     glRotatef(-20,0.0,0.0,1.0);
-     glScalef(0.3,0.3,0.2);
-     glRotatef(angle, 0, 1, 0); // rotacao eterna
-     glmDraw(aviao, GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
-     glPopMatrix();
-
-     /*
-     angle = angle+0.6;
-     if(angle > 360)
-       angle = angle - 360;*/
-     glutKeyboardFunc(tecla);
-     glutSwapBuffers();
+void DesenhaAviao(void){
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix(); // salvar as coordenadas correntes
+  glTranslatef(movz, 0, 0);
+  glTranslatef(0.0,0.0,570.0);
+  glRotatef(-90,0.0,1.0,0.0);
+  glRotatef(-20,0.0,0.0,1.0);
+  glScalef(0.3,0.3,0.2);
+  glRotatef(angle, 0, 1, 0); // rotacao eterna
+  glmDraw(aviao, GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
+  glPopMatrix();
+  /* Se eu quiser deixar rodando eternamente
+  angle = angle+0.6;
+  if(angle > 360)
+    angle = angle - 360;
+  */
 }
 
 
@@ -106,13 +121,13 @@ void EspecificaParametrosVisualizacao(void){
 	// Inicializa sistema de coordenadas de projeção
 	glLoadIdentity();
 	// Especifica a projeção perspectiva
-	gluPerspective(angle,fAspect,1,400.0);
+	gluPerspective(40,fAspect,20,100.0);
 	// Especifica sistema de coordenadas do modelo
 	glMatrixMode(GL_MODELVIEW);
 	// Inicializa sistema de coordenadas do modelo
 	glLoadIdentity();
 	// Especifica posição do observador e do alvo
-	gluLookAt(0,0,600, 0,0,0, 0,1,0);
+	gluLookAt(0,0,590, 1,0,0, 0,1,0);
 }
 
 // Função callback chamada quando o tamanho da janela é alterado
@@ -143,8 +158,8 @@ int main(int argc, char* argv[]){
     glmVertexNormals(cenario,180.0,0);
     glmVertexNormals(aviao,180.0,0);
 
-    glutDisplayFunc(Desenha);
-    glutIdleFunc(Desenha);
+    glutDisplayFunc(Simulator);
+    glutIdleFunc(Simulator);
     glutReshapeFunc(AlteraTamanhoJanela);
     glutKeyboardFunc(tecla);
     glutMouseFunc(GerenciaMouse);
