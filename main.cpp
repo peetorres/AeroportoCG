@@ -35,11 +35,17 @@ void GerenciaMouse (int button, int state, int x, int y){
 
 void tecla(unsigned char tecla, int x, int y){
     switch (tecla){
-      case 'w':
+      case 'v':
         movz += 0.1;
         break;
-      case 's':
+      case 'b':
         movz -= 0.1;
+        break;
+      case 'w':
+        movx += 0.1;
+        break;
+      case 's':
+        movx -= 0.1;
         break;
       case 'd': // alçar voo
         angle += 1;
@@ -83,7 +89,7 @@ void DesenhaCenario(void){
 void DesenhaAviao(void){
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix(); // salvar as coordenadas correntes
-  glTranslatef(movz, 0, 0);
+  glTranslatef(movx, 0, movz);
   glTranslatef(0.0,0.0,570.0);
   glRotatef(-90,0.0,1.0,0.0);
   glRotatef(-20,0.0,0.0,1.0);
